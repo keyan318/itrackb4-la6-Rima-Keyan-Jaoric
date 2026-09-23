@@ -17,11 +17,31 @@ class MovieController extends Controller
         6=>['id'=>6, 'title'=>'The Matrix','genre'=>'Science Fiction','year'=>1999,'director'=>'Christopher Nolan', 'rating'=>8.4,'duration'=>'2h 16m'],
           ];   
     }
-    public function index()
-    {
-        $items=$this->getItems();
-        return view('movies.index', ['items'=>$items]);
+    public function index(Request $request)
+{
+    $genre = $request->query('genre', '');
+    $year  = $request->query('year', '');
+
+    $allItems = $this->getItems();
+    $items = [];
+
+    foreach ($allItems as $item) {
+        if ($genre !== '' && $item['genre'] !== $genre) {
+            continue;
+        }
+        if ($year !== '' && (string)$item['year'] !== $year) {
+            continue;
+        }
+        $items[] = $item;
     }
+
+    return view('movies.index', [
+        'items' => $items,
+        'genre' => $genre,
+        'year'  => $year,
+    ]);
+}
+
 
 
     public function create()
@@ -71,20 +91,6 @@ class MovieController extends Controller
         $items=$this->getItems();
         return view('movies.show',  ['item'=>$items[1]]);
     }
-    public function filter($value=null){
-        $items=$this->getItems();
-
-        if($value!==null){
-            $filtered=[];
-            foreach($items as $item){
-                if($item['genre']==value){
-                    $filtered[]=$item;
-                }
-            }
-            }else{
-                $filtered=$items;
-            }
-            return view('movies.filtered', ['items'=>$filtered, 'value'=>$value]);
-        }
-    }
+    
+}
 
