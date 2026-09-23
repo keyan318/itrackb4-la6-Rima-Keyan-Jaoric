@@ -6,6 +6,44 @@
 
     <h2 class="mb-3">Movie List</h2>
 
+    {{-- Active filter status --}}
+    @if($genre || $year)
+        <div class="alert alert-info d-flex align-items-center gap-2 mb-3">
+            <strong>Active filters:</strong>
+            @if($genre)
+                <span class="badge bg-primary">Genre: {{ $genre }}</span>
+            @endif
+            @if($year)
+                <span class="badge bg-secondary">Year: {{ $year }}</span>
+            @endif
+            <a href="{{ route('movies.index') }}" class="btn btn-sm btn-outline-danger ms-auto">
+                ✕ Clear All Filters
+            </a>
+        </div>
+    @endif
+
+    {{-- Genre filter links --}}
+    <div class="mb-2">
+        <span class="fw-semibold me-2">Genre:</span>
+        @foreach(['Action', 'Science Fiction', 'Superher'] as $g)
+            <a href="{{ route('movies.index', array_filter(['genre' => $g, 'year' => $year])) }}"
+               class="btn btn-sm me-1 {{ $genre === $g ? 'btn-primary' : 'btn-outline-primary' }}">
+                {{ $g }}
+            </a>
+        @endforeach
+    </div>
+
+    {{-- Year filter links --}}
+    <div class="mb-4">
+        <span class="fw-semibold me-2">Year:</span>
+        @foreach([1999, 2008, 2010, 2014, 2021] as $y)
+            <a href="{{ route('movies.index', array_filter(['genre' => $genre, 'year' => $y])) }}"
+               class="btn btn-sm me-1 {{ (string)$year === (string)$y ? 'btn-secondary' : 'btn-outline-secondary' }}">
+                {{ $y }}
+            </a>
+        @endforeach
+    </div>
+
     <table class="table table-striped table-bordered table-hover">
         <thead class="table-dark">
             <tr>
