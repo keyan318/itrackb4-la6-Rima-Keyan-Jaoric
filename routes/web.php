@@ -11,12 +11,14 @@ Route::get('/', function () {
 
 //Movies
 Route::get('/movies/featured', [MovieController::class, 'featured'])->name('movies.featured');
-Route::get('/movies/filter/{value?}', [MovieController::class, 'filter'])->name('movies.filter');
+Route::get('/movies/filter/{value?}', function ($value = null) {
+    if ($value) {
+        return redirect()->route('movies.index', ['genre' => $value]);
+    }
+    return redirect()->route('movies.index');
+});
 Route::resource('movies', MovieController::class)->only(['index', 'show']);
 
-//Teachers
-Route::get('/teachers/featured', [TeacherController::class, 'featured'])->name('teachers.featured');
-Route::resource('teachers', TeacherController::class);
-Route::resource('teachers', TeacherController::class)->only(['index.show']);
+
 
 
