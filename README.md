@@ -17,3 +17,21 @@ I used route names like `route('movies.show', $item['id'])` instead of directly 
 For example, if I change `/movies` to `/films`, the links using `route()` can follow the new route. But if I used the hard-coded URLs, I would have to change the links manually in my Blade files.
 # itrackb4-la3-Rima-Keyan-Jaoric
 # itrackb4-la4-Rima-Keyan-Jaoric
+
+## Lab Activity 6 — Two Filters, One Route
+
+### Q1. You added a second filter without adding a single route. Explain why no new route was needed. Your answer should say something about what the router actually looks at.
+
+The router only looks at the path, not the query string. My route is just `/movies`, so `?genre=Action`, `?year=2010`, or both are still the same route to Laravel. I read the values with `$request->query()` inside the controller, so one route handles all four URLs.
+
+### Q2. Suppose you had built both filters as route parameters instead. Describe what the URL for 'year 4 only, no course filter' would have to look like, and why.
+
+It would have to look something like `/movies/_/2010`. Route parameters are positional, so I'd still need to fill the genre slot with a placeholder even when I don't want to filter by genre. Query strings let me just leave a key out completely, which is why they fit this better.
+
+### Q3. Your navigation link stays marked on a detail page and also when a filter is applied. Only one of those two needed a change to your pattern. Say which one, and why the other needed nothing.
+
+The detail page needed a change — I changed the check to a wildcard, `request()->is('movies*')`, so it also matches `/movies/5`. The filter needed nothing, because `?genre=Action` is a query string, not a path, and `request()->is()` only checks the path.
+
+### Q4. You deleted your old filter method but kept the empty store and update methods, even though none of the three can be reached by a URL. Explain the difference between them.
+
+`store()` and `update()` are empty because I haven't built them yet — they're for later weeks. My old `filter()` method was different: it was finished, and I replaced it with a better way of filtering. So I kept the unfinished ones and deleted the one that was already replaced.
